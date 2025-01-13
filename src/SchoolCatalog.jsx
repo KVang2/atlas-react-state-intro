@@ -1,4 +1,37 @@
+import React, { useEffect, useState } from 'react';
+
 export default function SchoolCatalog() {
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch("/api/courses.json");
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const data = await response.json();
+        setCourses(data);
+        setLoading(false);
+      } catch (error) {
+        setError(error.message);
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  if (loading) {
+    return <p>Loading...</p>
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
   return (
     <div className="school-catalog">
       <h1>School Catalog</h1>
@@ -15,36 +48,18 @@ export default function SchoolCatalog() {
           </tr>
         </thead>
         <tbody>
+          {courses.map((course) => (
           <tr>
-            <td>1</td>
-            <td>PP1000</td>
-            <td>Beginning Procedural Programming</td>
-            <td>2</td>
-            <td>30</td>
+            <td>{course.trimester}</td>
+            <td>{course.courseNumber}</td>
+            <td>{course.courseName}</td>
+            <td>{course.semesterCredits}</td>
+            <td>{course.totalClockHours}</td>
             <td>
               <button>Enroll</button>
             </td>
           </tr>
-          <tr>
-            <td>1</td>
-            <td>PP1100</td>
-            <td>Basic Procedural Programming</td>
-            <td>4</td>
-            <td>50</td>
-            <td>
-              <button>Enroll</button>
-            </td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>OS1000</td>
-            <td>Fundamentals of Open Source Operating Systems</td>
-            <td>2.5</td>
-            <td>37.5</td>
-            <td>
-              <button>Enroll</button>
-            </td>
-          </tr>
+        ))}
         </tbody>
       </table>
       <div className="pagination">
