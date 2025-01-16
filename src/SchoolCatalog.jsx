@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useappContext } from './appContext';
 
 export default function SchoolCatalog() {
   const [courses, setCourses] = useState([]);
@@ -10,6 +11,7 @@ export default function SchoolCatalog() {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 5;
+  const { enrollCourse } = useappContext();
 
   // Fetch data
   useEffect(() => {
@@ -78,6 +80,11 @@ export default function SchoolCatalog() {
     }
   };
 
+  // handleEnroll
+  const handleEnroll = (course) => {
+    enrollCourse(course);
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -110,7 +117,7 @@ export default function SchoolCatalog() {
             <td>{course.semesterCredits}</td>
             <td>{course.totalClockHours}</td>
             <td>
-              <button>Enroll</button>
+              <button onClick={() => handleEnroll(course)}>Enroll</button>
             </td>
           </tr>
         ))}
