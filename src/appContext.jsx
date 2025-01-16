@@ -13,8 +13,8 @@ export function AppProvider({ children }) {
   };
 
   // Function to handle dropping a course
-  const dropCourse = (courseId) => {
-    setEnrolledCourses((prev) => prev.filter(course => course.id !== courseId));
+  const dropCourse = (courseNumber) => {
+    setEnrolledCourses((prev) => prev.filter(course => course.courseNumber !== courseNumber));
   };
 
   return (
